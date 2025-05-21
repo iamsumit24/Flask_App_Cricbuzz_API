@@ -72,8 +72,10 @@ pipeline{
                     withCredentials([usernamePassword(credentialsId: 'gitcred', usernameVariable: 'user', passwordVariable: 'pass')]) {
 
                         sh """
-                            git clone -b main https://${user}:${pass}@github.com/priyam930/Flask_App_Cricbuzz_CD.git
-                            cd Flask_App_Cricbuzz_CD
+                           git clone -b main https://${user}:${pass}@github.com/iamsumit24/Flask_App_Cricbuzz_API_cd.git
+
+                           cd Flask_App_Cricbuzz_CD
+
 
                             ls
                             cat deployment.yaml
@@ -93,7 +95,7 @@ pipeline{
 
                             echo "Changing tag to ${BUILD_NUMBER}"
 
-                            sed -i 's|image: sumittiwari2025/flask-app:.*|image: ${IMAGE_NAME}:${BUILD_NUMBER}|g' deployment.yaml
+                            sed -i 's|image: priyam930/flask-app:.*|image: ${IMAGE_NAME}:${BUILD_NUMBER}|g' deployment.yaml
 
                             echo "changed tag"
 
@@ -111,6 +113,6 @@ pipeline{
                 }
             }
          
-        
+          }
     }
 }
