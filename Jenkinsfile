@@ -65,6 +65,51 @@ pipeline{
 
             
         }
+          stage('Update the deployment file in CD') {
+
+            steps {
+                script{
+                    withCredentials([usernamePassword(credentialsId: 'gitcred', usernameVariable: 'user', passwordVariable: 'pass')]) {
+
+                        sh """
+                            git clone -b main https://${user}:${pass}@github.com/priyam930/Flask_App_Cricbuzz_CD.git
+                            cd Flask_App_Cricbuzz_CD
+
+                            ls
+                            cat deployment.yaml
+                
+
+                        """
+
+                        sh """
+                            echo "new shell"
+                            echo $pwd
+                            cd  Flask_App_Cricbuzz_CD
+                            echo $pwd
+
+                            ls
+
+                            cat deployment.yaml
+
+                            echo "Changing tag to ${BUILD_NUMBER}"
+
+                            sed -i 's|image: sumittiwari2025/flask-app:.*|image: ${IMAGE_NAME}:${BUILD_NUMBER}|g' deployment.yaml
+
+                            echo "changed tag"
+
+                            cat deployment.yaml
+
+
+                            git add deployment.yaml
+                            git commit -m "Updated the tag to ${BUILD_NUMBER}"
+                            git push origin main
+
+                        """
+
+                    }
+
+                }
+            }
          
         
     }
